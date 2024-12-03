@@ -1,0 +1,131 @@
+echo "# Food-Ordering" >> README.md
+git init
+git add README.md
+git commit -m "first commit"
+git branch -M main
+git remote add origin https://github.com/waiyan0823/Food-Ordering.git
+git push -u origin main
+#include<cstring>
+#include<iostream>
+#include<iomanip>
+#include "Order.h"
+using namespace std;
+
+Add_Item::Add_Item()
+{
+	numItem = 0;
+	pHead = 0;
+}
+
+
+Add_Item::~Add_Item()
+{
+}
+
+void Add_Item::AddToFront()
+{
+	char iname[30];
+	int iquantity;
+	double iprice;
+	Node* pNew = new Node;
+	cout << "\nEnter the item name:";
+	cin.ignore();
+	cin.getline(iname, 30);
+	cout << "Enter the quantity of item: ";
+	cin >> iquantity;
+	cout << "Enter the item price: ";
+	cin >> iprice;
+	strcpy_s(pNew->data.itemname, iname);
+	pNew->data.itemquantity = iquantity;
+	pNew->data.itemprice = iprice;
+	pNew->link = pHead;
+	pHead = pNew;
+	numItem++;
+}
+
+
+void Add_Item::printData()
+{
+	pCurr = pHead;
+	cout << left << setw(30) << "Item Name" << setw(20) << "Item quantity" << setw(20) << "Item Price" << endl;
+	while (pCurr != 0)
+	{
+		cout << left << setw(30) << pCurr->data.itemname << setw(20) << pCurr->data.itemquantity << setw(20) << pCurr->data.itemprice << endl;
+		pCurr = pCurr->link;
+	}
+
+	cout << "\n";
+
+}
+
+int Add_Item::NumberOfItem()
+{
+	return numItem;
+}
+
+void Sort::BubbleSort(Add_Item::Node* pHead)
+{
+	if (!pHead)
+		return;
+
+	bool swapped;
+	Add_Item::Node* ptr;
+	Add_Item::Node* lptr=nullptr;
+
+	do {
+		swapped = false;
+		ptr = pHead;
+
+		while (ptr->link != lptr)
+		{
+			if (strcmp(ptr->data.itemname, ptr->link->data.itemname) > 0)
+			{
+				item temp = ptr->data;
+				ptr->data = ptr->link->data;
+				ptr->link->data = temp;
+				swapped = true;
+			}
+			ptr = ptr->link;
+		}
+		lptr = ptr;
+	} while (swapped);
+
+
+}
+
+Add_Item::Node* Search::SequentialSearch(Add_Item::Node* pHead, char itemname[])
+{
+	Add_Item::Node* pCurr = pHead;
+	bool found = false;
+	while (pCurr != nullptr)
+	{
+		//compare the itemname and itemnametosearch in the linked list
+		if (strcmp(pCurr->data.itemname, itemname) == 0)
+		{
+			found = true;
+			return pCurr;
+		}
+		pCurr = pCurr->link;
+	}
+	return nullptr;
+
+}
+
+void calculator::totalamount(Add_Item::Node* pHead)
+{
+	double totalamount = 0;
+	Add_Item::Node* pCurr = pHead;
+
+	// Calculate the total amount and print item details
+	cout << left << setw(30) << "Item Name" << setw(20) << "Item Quantity" << setw(20) << "Item Price" << endl;
+	while (pCurr != nullptr)
+	{
+		totalamount += pCurr->data.itemquantity * pCurr->data.itemprice;
+		cout << left << setw(30) << pCurr->data.itemname << setw(20) << pCurr->data.itemquantity << setw(20) << pCurr->data.itemprice << endl;
+		pCurr = pCurr->link;
+	}
+
+	// Print the total bill
+	cout << "The total bill: RM " << totalamount << endl;
+	cout << endl;
+}
